@@ -1,0 +1,26 @@
+version: '2'
+services:
+  virtual_trading:
+    networks:
+      - infydex
+    image: "virtual_trading"
+    container_name: "virtual_trading"
+    ports:
+      - "${BACKEND_PORT_HOST}:${BACKEND_PORT_CONTAINER}"
+    environment:
+      - PORT=${BACKEND_PORT_HOST}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - PG_DB_HOST=${PG_DB_HOST}
+      - PG_DB_PORT=${PG_PORT_HOST}
+      - PG_DB_NAME=${POSTGRES_DB}
+      - PG_DB_USER=${POSTGRES_USER}
+      - PG_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - SEEDFOLDER=dev
+    volumes:
+      - ~/.gradle:/virtual_trading/.gradle
+      - .:/virtual_trading
+    working_dir: '/virtual_trading'
+    command: './gradlew -p backend clean bootRun --no-daemon'
+networks:
+  infydex:
+    external: true
