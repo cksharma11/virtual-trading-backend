@@ -3,8 +3,7 @@ services:
   virtual_trading:
     networks:
       - infydex
-    image: "virtual_trading"
-    container_name: "virtual_trading"
+    image: virtual_trading
     ports:
       - "${BACKEND_PORT_HOST}:${BACKEND_PORT_CONTAINER}"
     environment:
@@ -19,8 +18,8 @@ services:
     volumes:
       - ~/.gradle:/virtual_trading/.gradle
       - .:/virtual_trading
-    working_dir: '/virtual_trading'
-    command: './gradlew -p backend clean bootRun --no-daemon'
+    command: './gradlew clean bootRun --no-daemon'
+    stop_grace_period: 1s
 networks:
   infydex:
     external: true
