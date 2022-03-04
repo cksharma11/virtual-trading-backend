@@ -16,12 +16,18 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.postgresql:postgresql:42.2.14")
+	implementation("org.flywaydb:flyway-core:6.5.7")
+	implementation("com.vladmihalcea:hibernate-types-52:2.9.12")
+	implementation("com.github.jsqlparser:jsqlparser:4.2")
+	testImplementation("io.zonky.test:embedded-database-spring-test:1.6.2")
+	testImplementation("org.assertj:assertj-db:2.0.0")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.flywaydb:flyway-core")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

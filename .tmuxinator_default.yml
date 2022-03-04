@@ -1,0 +1,24 @@
+name: virtual_trading
+root: .
+
+tmux_options: -f config/local-standalone/tmux.conf
+
+windows:
+  - main:
+      layout: tiled
+      panes:
+        - run:
+            - printf '\033]2;%s\033\\' 'run'
+            - sleep 3 && ./gradlew clean bootRun
+  - secondary:
+      layout: tiled
+      panes:
+        - build:
+            - printf '\033]2;%s\033\\' 'build'
+            - ./gradlew build -x test --continuous
+        - Postgres:
+            - printf '\033]2;%s\033\\' 'Postgres'
+            - docker-compose up
+        - commander:
+            - printf '\033]2;%s\033\\' 'commander'
+            - bash config/local-standalone/commander.sh

@@ -1,0 +1,13 @@
+---
+version: "3"
+
+services:
+  virtual_trading-postgres:
+    image: bitnami/postgresql:14
+    container_name: virtual_trading-postgres
+    environment:
+      - POSTGRES_USER=infydex
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=virtual_trading
+    ports:
+      - "5232:5432"

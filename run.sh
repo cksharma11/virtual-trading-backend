@@ -1,30 +1,10 @@
-_create_role_and_database() {
-  psql -U $(whoami) -d postgres -c "SELECT rolname FROM pg_roles WHERE rolname='infydex';" | grep -w 'infydex' ||
-    psql -U $(whoami) -d postgres -c "create user infydex with encrypted password 'infydex';"
+#!/bin/bash
 
-  psql -U $(whoami) -d postgres -c "SELECT rolsuper FROM pg_roles WHERE rolname='infydex';" | grep -w 't' ||
-    psql -U $(whoami) -d postgres -c "ALTER USER infydex WITH SUPERUSER;"
-
-  psql -l | grep -w virtual_trading ||
-    psql -U $(whoami) -d postgres -c 'CREATE DATABASE virtual_trading OWNER infydex;'
+__standalone_tmux() {
+  docker-compose build
+  type tmuxinator > /dev/null 2>&1 || brew install tmuxinator
+  touch ~/.tmux.conf
+  tmuxinator local || tmuxinator start -p .tmuxinator_default.yml
 }
 
-dev() {
-  mkdir -p "${PWD}"/.m2
-
-  _create_role_and_database
-
-  docker network create infydex
-  docker build -t virtual_trading -f Dockerfile .
-  docker-compose up
-}
-
-usage() {
-  echo "use dev to start dev server"
-}
-
-CMD=${1:-}
-case ${CMD} in
-dev) dev ;;
-*) usage ;;
-esac
+__standalone_tmux
