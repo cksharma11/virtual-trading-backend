@@ -1,43 +1,64 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.6.2"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.6.10"
-	kotlin("plugin.spring") version "1.6.10"
+    id("org.springframework.boot") version "2.6.2"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.spring") version "1.6.10"
 }
 
 group = "com.infydex"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
+val junit5JupiterVersion = "5.8.2"
+val assertjVersion = "3.22.0"
+val springMockKVersion = "3.1.1"
+val mockKVersion = "1.12.2"
+
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.postgresql:postgresql:42.2.14")
-	implementation("org.flywaydb:flyway-core:6.5.7")
-	implementation("com.vladmihalcea:hibernate-types-52:2.9.12")
-	implementation("com.github.jsqlparser:jsqlparser:4.2")
-	testImplementation("io.zonky.test:embedded-database-spring-test:1.6.2")
-	testImplementation("org.assertj:assertj-db:2.0.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.6.4")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.postgresql:postgresql:42.3.3")
+    implementation("org.flywaydb:flyway-core:8.5.1")
+    implementation("com.vladmihalcea:hibernate-types-52:2.14.0")
+    implementation("com.github.jsqlparser:jsqlparser:4.3")
+    testImplementation("io.zonky.test:embedded-database-spring-test:2.1.1")
+    testImplementation("org.assertj:assertj-db:2.0.2")
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    //   #junit5 #mockk
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.1.1")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.4")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit5JupiterVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit5JupiterVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junit5JupiterVersion}")
+    testImplementation("org.assertj:assertj-core:${assertjVersion}")
+    testImplementation("org.assertj:assertj-core:3.11.1")
+
+    testImplementation("com.ninja-squad:springmockk:${springMockKVersion}")
+    testImplementation("io.mockk:mockk:${mockKVersion}")
+    testImplementation("io.mockk:mockk:1.9.3")
+
+    // #devtool
+    developmentOnly("org.springframework.boot:spring-boot-devtools:2.6.4")
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
-	}
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
+    }
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
