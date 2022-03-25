@@ -14,7 +14,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 val junit5JupiterVersion = "5.8.2"
 val assertjVersion = "3.22.0"
 val springMockKVersion = "3.1.1"
-val mockKVersion = "1.12.2"
+val mockKVersion = "1.12.3"
 
 repositories {
     mavenCentral()
@@ -23,11 +23,12 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.6.4")
     implementation("org.springframework.boot:spring-boot-starter-web:2.6.4")
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.6.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.6.4")
     implementation("org.postgresql:postgresql:42.3.3")
     implementation("org.flywaydb:flyway-core:8.5.2")
     implementation("com.vladmihalcea:hibernate-types-52:2.14.0")
     implementation("com.github.jsqlparser:jsqlparser:4.3")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.6.4")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -46,15 +47,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junit5JupiterVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit5JupiterVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter-params:${junit5JupiterVersion}")
-    testImplementation("org.assertj:assertj-core:${assertjVersion}")
-    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation("org.assertj:assertj-core:3.22.0")
 
     testImplementation("com.ninja-squad:springmockk:${springMockKVersion}")
-    testImplementation("io.mockk:mockk:${mockKVersion}")
-    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("io.mockk:mockk:1.12.3")
 
     testImplementation("io.zonky.test:embedded-database-spring-test:2.1.1")
     testImplementation("org.assertj:assertj-db:2.0.2")
+    testImplementation("org.hsqldb:hsqldb:2.6.1")
 
     // #devtool
     developmentOnly("org.springframework.boot:spring-boot-devtools:2.6.4")

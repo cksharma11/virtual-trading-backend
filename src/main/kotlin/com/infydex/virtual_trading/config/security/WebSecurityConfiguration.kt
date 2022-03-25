@@ -15,6 +15,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     val publicEndpoints = arrayOf(
         "/health/**",
+        "/api/v1/investor/signup"
     )
 
     override fun configure(http: HttpSecurity) {
