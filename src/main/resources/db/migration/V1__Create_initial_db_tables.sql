@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS investor
     id         SERIAL PRIMARY KEY,
     name       VARCHAR(200),
     email      VARCHAR(100),
-    phone      VARCHAR(100) NOT NULL,
+    phone      VARCHAR(100) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT now()
 );
 

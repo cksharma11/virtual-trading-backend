@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class VirtualTradingApplication
 
 fun main(args: Array<String>) {
-	runApplication<VirtualTradingApplication>(*args)
+    runApplication<VirtualTradingApplication>(*args)
 }

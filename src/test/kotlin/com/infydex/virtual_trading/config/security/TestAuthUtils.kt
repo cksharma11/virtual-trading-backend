@@ -21,5 +21,4 @@ object TestAuthUtils {
             )
         return objectMapper.writeValueAsString(jwtPayload)
     }
-
 }

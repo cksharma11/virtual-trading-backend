@@ -44,12 +44,12 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.1.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.4")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit5JupiterVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit5JupiterVersion}")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:${junit5JupiterVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit5JupiterVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit5JupiterVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junit5JupiterVersion")
     testImplementation("org.assertj:assertj-core:3.22.0")
 
-    testImplementation("com.ninja-squad:springmockk:${springMockKVersion}")
+    testImplementation("com.ninja-squad:springmockk:$springMockKVersion")
     testImplementation("io.mockk:mockk:1.12.3")
 
     testImplementation("io.zonky.test:embedded-database-spring-test:2.1.1")
