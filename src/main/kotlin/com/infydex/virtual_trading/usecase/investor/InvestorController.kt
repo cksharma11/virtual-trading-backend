@@ -1,6 +1,7 @@
 package com.infydex.virtual_trading.usecase.investor
 
 import com.infydex.virtual_trading.usecase.investor.dto.InvestorSignupDto
+import com.infydex.virtual_trading.usecase.investor.entity.InvestorEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,7 +16,7 @@ class InvestorController {
     lateinit var investorService: InvestorService
 
     @PostMapping("/signup")
-    fun signup(@Valid @RequestBody investorSignupDto: InvestorSignupDto): Any {
+    fun signup(@Valid @RequestBody investorSignupDto: InvestorSignupDto): InvestorEntity {
         return investorService.signup(investorSignupDto)
     }
 }

@@ -50,6 +50,21 @@ internal class JwtIncomingRequestFilterTest {
                     .string("""{"username":"test-user","isAuthenticated":true}""")
             )
     }
+
+    @Test
+    fun `should return 400 bad request if provided broken jwt`() {
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/virtual-trading/api/auth-test-endpoint")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(
+                    X_JWT_PAYLOAD,
+                    "{\"user\": \"test\""
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
 }
 
 @RestController

@@ -1,8 +1,8 @@
 package com.infydex.virtual_trading.usecase.investor.dto
 
-import javax.validation.constraints.Size
+import com.infydex.virtual_trading.constraints.ValidPhone
 
 data class InvestorSignupDto(
-    @Size(min = 10, max = 10)
+    @ValidPhone
     val phone: String
 )
