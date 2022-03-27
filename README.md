@@ -57,6 +57,10 @@ Common issues -
 - Run `ktlint -F "src/**/*.kt"`
 - There may some issues which needs manual fix, do them.
 
+## Swagger UI
+
+http://localhost:3030/virtual-trading/swagger-ui/index.html
+
 ## Structure
 
 Project has basic spring boot structure,
