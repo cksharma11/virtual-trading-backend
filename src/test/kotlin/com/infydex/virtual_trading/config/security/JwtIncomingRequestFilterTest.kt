@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -37,7 +38,7 @@ internal class JwtIncomingRequestFilterTest {
             MockMvcRequestBuilders
                 .request(HttpMethod.GET, "/virtual-trading/api/auth-test-endpoint")
                 .contextPath("/virtual-trading")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .header(
                     X_JWT_PAYLOAD,
                     TestAuthUtils.createJWTPayload(username = "test-user")

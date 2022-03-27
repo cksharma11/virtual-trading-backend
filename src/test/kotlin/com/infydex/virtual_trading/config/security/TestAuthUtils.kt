@@ -16,7 +16,7 @@ object TestAuthUtils {
                 "sub" to username,
                 "user" to mapOf(
                     "entitlements" to entitlements,
-                    "name" to arrayOf("cksharma"),
+                    "name" to arrayOf(username),
                 )
             )
         return objectMapper.writeValueAsString(jwtPayload)

@@ -22,8 +22,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers(*publicEndpoints)
-            .permitAll()
+            .antMatchers(*publicEndpoints).permitAll()
             .antMatchers("/**").access("hasRole('infydex.investor')")
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
