@@ -43,6 +43,11 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging:2.1.21")
 
+    // #Swagger
+    implementation("org.springdoc:springdoc-openapi-data-rest:1.6.6")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.6")
+
     //   #junit5 #mockk
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.1.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.4")

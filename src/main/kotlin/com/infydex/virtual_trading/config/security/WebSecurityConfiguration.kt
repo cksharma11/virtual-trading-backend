@@ -15,7 +15,12 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     val publicEndpoints = arrayOf(
         "/health/**",
-        "/api/v1/investor/signup"
+        "/api/v1/investor/signup",
+        "/swagger-ui.html",
+        "/swagger-ui/**",
+        "/swagger-resources/**",
+        "/**/api-docs/**",
+        "/docs/**",
     )
 
     override fun configure(http: HttpSecurity) {
