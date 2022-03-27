@@ -16,6 +16,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
     val publicEndpoints = arrayOf(
         "/health/**",
         "/api/v1/investor/signup",
+        "/api/v1/investor/create-pin",
         "/swagger-ui.html",
         "/swagger-ui/**",
         "/swagger-resources/**",

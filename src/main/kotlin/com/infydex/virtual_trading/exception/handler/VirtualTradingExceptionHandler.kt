@@ -1,5 +1,6 @@
 package com.infydex.virtual_trading.exception.handler
 
+import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.dto.ErrorResponse
 import org.slf4j.LoggerFactory
@@ -34,6 +35,19 @@ class VirtualTradingExceptionHandler {
             .body(
                 ErrorResponse(
                     status = HttpStatus.CONFLICT.value(),
+                    message = mostSpecificCause.message ?: ""
+                )
+            )
+    }
+
+    @ExceptionHandler(InvalidInvestorIdException::class, Exception::class)
+    fun invalidInvestorIdExceptionHandler(exception: InvalidInvestorIdException): ResponseEntity<ErrorResponse> {
+        val mostSpecificCause = NestedExceptionUtils.getMostSpecificCause(exception)
+        logger.warn(exception.message, exception)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(
+                ErrorResponse(
+                    status = HttpStatus.BAD_REQUEST.value(),
                     message = mostSpecificCause.message ?: ""
                 )
             )

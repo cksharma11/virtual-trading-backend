@@ -1,7 +1,9 @@
 package com.infydex.virtual_trading.usecase.investor
 
 import com.infydex.virtual_trading.usecase.investor.dto.InvestorSignupDto
+import com.infydex.virtual_trading.usecase.investor.dto.PinDto
 import com.infydex.virtual_trading.usecase.investor.entity.InvestorEntity
+import com.infydex.virtual_trading.usecase.investor.entity.PinEntity
 import org.junit.After
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,6 +22,9 @@ internal class InvestorServiceTest {
     @Mock
     lateinit var investorRepository: InvestorRepository
 
+    @Mock
+    lateinit var pinRepository: PinRepository
+
     @InjectMocks
     lateinit var investorService: InvestorService
 
@@ -36,6 +41,16 @@ internal class InvestorServiceTest {
         investorService.signup(investor)
 
         verify(investorRepository).save(any(InvestorEntity::class.java))
+    }
+
+    @Test
+    fun `should create investor pin in database in provided valid investor id`() {
+        given(pinRepository.save(any(PinEntity::class.java))).willReturn(PinEntity())
+
+        val pinDto = PinDto(pin = "1234", investorId = 1)
+        investorService.createPin(pinDto)
+
+        verify(pinRepository).save(any(PinEntity::class.java))
     }
 
     @After

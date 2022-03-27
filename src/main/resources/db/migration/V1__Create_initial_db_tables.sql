@@ -7,6 +7,17 @@ CREATE TABLE IF NOT EXISTS investor
     created_at TIMESTAMP DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS pin
+(
+    id          SERIAL PRIMARY KEY,
+    pin         VARCHAR(32),
+    investor_id SERIAL,
+    created_at  TIMESTAMP DEFAULT now(),
+    CONSTRAINT fk_investor_id
+        FOREIGN KEY (investor_id)
+            REFERENCES investor (id)
+);
+
 CREATE TYPE TRANSACTION_TYPE AS ENUM ('credit', 'withdraw');
 
 CREATE TABLE IF NOT EXISTS fund
