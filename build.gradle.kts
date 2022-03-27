@@ -79,10 +79,11 @@ tasks.withType<Test> {
 }
 
 tasks.test {
-    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+    finalizedBy(tasks.jacocoTestReport)
 }
 tasks.jacocoTestReport {
-    dependsOn(tasks.test) // tests are required to run before generating the report
+    dependsOn(tasks.test)
+    finalizedBy(tasks.jacocoTestCoverageVerification)
 }
 
 jacoco {
@@ -102,7 +103,7 @@ tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = "0.5".toBigDecimal()
+                minimum = "0.8".toBigDecimal()
             }
         }
 
@@ -114,7 +115,7 @@ tasks.jacocoTestCoverageVerification {
             limit {
                 counter = "LINE"
                 value = "TOTALCOUNT"
-                maximum = "0.3".toBigDecimal()
+                maximum = "0.8".toBigDecimal()
             }
         }
     }
