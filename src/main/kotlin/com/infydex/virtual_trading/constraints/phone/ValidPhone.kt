@@ -1,4 +1,4 @@
-package com.infydex.virtual_trading.constraints
+package com.infydex.virtual_trading.constraints.phone
 
 import javax.validation.Constraint
 import javax.validation.Payload

@@ -1,5 +1,6 @@
 package com.infydex.virtual_trading.constraints
 
+import com.infydex.virtual_trading.constraints.phone.PhoneValidator
 import org.junit.After
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

@@ -1,0 +1,9 @@
+#! /bin/bash
+
+set -e
+
+# shellcheck disable=SC2046
+cd $(git rev-parse --show-toplevel)
+
+ktlint
+./gradlew test
