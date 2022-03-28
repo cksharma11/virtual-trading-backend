@@ -1,5 +1,10 @@
 # virtual-trading Service
 
+## Github Stats
+<a href="https://github.com/cksharma11/virtual-trading-backend/actions">
+  <img alt="Tests Passing" src="https://github.com/cksharma11/virtual-trading-backend/workflows/Virtual%20Trading/badge.svg" />
+</a>
+
 ## Description 
 
 The idea is to create a dummy trading platform which can be used for learning stock marketing.
