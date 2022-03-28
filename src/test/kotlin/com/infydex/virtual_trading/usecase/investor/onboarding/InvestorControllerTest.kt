@@ -3,6 +3,7 @@ package com.infydex.virtual_trading.usecase.investor.onboarding
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
+import com.infydex.virtual_trading.exception.InvestorDoesNotExistsException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.handler.VirtualTradingExceptionHandler
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
@@ -258,6 +259,34 @@ internal class InvestorControllerTest {
                 isUnauthorized()
                 content {
                     json("{\"status\":401,\"message\":\"Invalid login credentials\",\"errorType\":\"\"}")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `should return 404 when investor id does not exists in db`() {
+        val investorLoginDtoPayload = ObjectMapper().createObjectNode()
+            .put("pin", "1111")
+            .put("investorId", 1)
+            .toString()
+        val investorLoginDto = InvestorLoginDto(investorId = 1, pin = "1111")
+
+        given(investorService.login(investorLoginDto))
+            .willReturn(PinEntity().copy(investorId = 1, pin = "1111"))
+
+        given(investorService.getInvestorById(1))
+            .willThrow(InvestorDoesNotExistsException())
+
+        mockMvc.post("/api/v1/investor/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = investorLoginDtoPayload
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status {
+                isNotFound()
+                content {
+                    json("{\"status\":404,\"message\":\"Investor does not exists with given investor id\",\"errorType\":\"\"}")
                 }
             }
         }
