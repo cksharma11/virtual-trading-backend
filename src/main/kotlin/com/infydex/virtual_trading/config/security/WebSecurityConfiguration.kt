@@ -17,6 +17,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
         "/health/**",
         "/api/v1/investor/signup",
         "/api/v1/investor/create-pin",
+        "/api/v1/investor/login",
         "/swagger-ui.html",
         "/swagger-ui/**",
         "/swagger-resources/**",

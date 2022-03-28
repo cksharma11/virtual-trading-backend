@@ -1,11 +1,10 @@
-package com.infydex.virtual_trading.usecase.investor
+package com.infydex.virtual_trading.usecase.investor.onboarding
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.handler.VirtualTradingExceptionHandler
-import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorController
-import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorService
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
@@ -14,10 +13,11 @@ import org.junit.After
 import org.junit.Before
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito
+import org.mockito.BDDMockito.given
 import org.mockito.InjectMocks
 import org.mockito.Mockito
 import org.mockito.Mockito.doThrow
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -53,7 +53,7 @@ internal class InvestorControllerTest {
     fun `should create new investor`() {
         val investor = InvestorSignupDto(phone = "9876543210")
 
-        BDDMockito.given(investorService.signup(investor)).willReturn(InvestorEntity().copy(phone = investor.phone))
+        given(investorService.signup(investor)).willReturn(InvestorEntity().copy(phone = investor.phone))
 
         mockMvc.post("/api/v1/investor/signup") {
             contentType = MediaType.APPLICATION_JSON
@@ -66,14 +66,14 @@ internal class InvestorControllerTest {
             }
         }
 
-        BDDMockito.verify(investorService).signup(investor)
+        verify(investorService).signup(investor)
     }
 
     @Test
     fun `should throw phone number already exists exception when registering twice with same number`() {
         val investor = InvestorSignupDto(phone = "9876543210")
 
-        BDDMockito.given(investorService.signup(investor)).willThrow(PhoneNumberAlreadyRegisteredException())
+        given(investorService.signup(investor)).willThrow(PhoneNumberAlreadyRegisteredException())
 
         mockMvc.post("/api/v1/investor/signup") {
             contentType = MediaType.APPLICATION_JSON
@@ -118,7 +118,7 @@ internal class InvestorControllerTest {
 
         val pinDto = PinDto(investorId = 1, pin = "1234")
 
-        BDDMockito.given(investorService.createPin(pinDto))
+        given(investorService.createPin(pinDto))
             .willReturn(PinEntity().copy(pin = "1234", investorId = 1))
 
         mockMvc.post("/api/v1/investor/create-pin") {
@@ -142,7 +142,7 @@ internal class InvestorControllerTest {
 
         val pinDto = PinDto(investorId = 1, pin = "1234")
 
-        BDDMockito.given(investorService.createPin(pinDto))
+        given(investorService.createPin(pinDto))
             .willReturn(PinEntity().copy(pin = "1234", investorId = 1))
 
         mockMvc.post("/api/v1/investor/create-pin") {
@@ -165,7 +165,7 @@ internal class InvestorControllerTest {
 
         val pinDto = PinDto(investorId = 1, pin = "1234")
 
-        BDDMockito.given(investorService.createPin(pinDto))
+        given(investorService.createPin(pinDto))
             .willReturn(PinEntity().copy(pin = "1234", investorId = 1))
 
         mockMvc.post("/api/v1/investor/create-pin") {
@@ -181,7 +181,7 @@ internal class InvestorControllerTest {
 
     @Test
     fun `should throw exception when investor id foreign key constraint violates`() {
-        val createPinDtoString = ObjectMapper().createObjectNode()
+        val createPinDtoPayload = ObjectMapper().createObjectNode()
             .put("pin", "1234")
             .put("investorId", "1234")
             .toString()
@@ -192,12 +192,44 @@ internal class InvestorControllerTest {
 
         mockMvc.post("/api/v1/investor/create-pin") {
             contentType = MediaType.APPLICATION_JSON
-            content = createPinDtoString
+            content = createPinDtoPayload
             accept = MediaType.APPLICATION_JSON
         }.andExpect {
             status {
                 isBadRequest()
                 content { json("{\"status\":400,\"message\":\"Invalid investor id provided\",\"errorType\":\"\"}") }
+            }
+        }
+    }
+
+    @Test
+    fun `should return customer with jwt token on valid login`() {
+        val investorLoginDtoPayload = ObjectMapper().createObjectNode()
+            .put("pin", "1234")
+            .put("investorId", 1)
+            .toString()
+        val investorLoginDto = InvestorLoginDto(investorId = 1, pin = "1234")
+
+        given(investorService.login(investorLoginDto))
+            .willReturn(PinEntity().copy(investorId = 1, pin = "1234"))
+
+        given(investorService.getInvestorById(1))
+            .willReturn(InvestorEntity().copy(phone = "9876543210", id = 1))
+
+        mockMvc.post("/api/v1/investor/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = investorLoginDtoPayload
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status {
+                isOk()
+                content {
+                    json(
+                        // TODO: Add jwt mock and replace the actual token with mocked one
+                        "{\"investor\": {\"phone\": \"9876543210\", \"id\": 1}, \"jwt\": \"eyJzdWIiOjEsInR5cCI6IkpXVCIsInVzZXIiOnsiZW50aXRsZW1lbnRzIjpbImluZnlkZXguaW52ZXN0b3IiXSwicGhvbmUiOlsiOTg3NjU0MzIxMCJdfSwiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJhdXRoMCJ9.1768-3L0-N74-IwdokUg84nKJrswjz2AKH-Hb_5bFJU\"}",
+                        false
+                    )
+                }
             }
         }
     }

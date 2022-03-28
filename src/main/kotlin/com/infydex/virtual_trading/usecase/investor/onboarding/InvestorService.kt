@@ -2,11 +2,13 @@ package com.infydex.virtual_trading.usecase.investor.onboarding
 
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.PinEntity
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.transaction.Transactional
 
 @Service
@@ -30,5 +32,13 @@ class InvestorService(
         } catch (ex: Exception) {
             throw InvalidInvestorIdException()
         }
+    }
+
+    fun login(investorLoginDto: InvestorLoginDto): PinEntity? {
+        return pinRepository.findByInvestorIdAndPin(investorLoginDto.investorId, investorLoginDto.pin)
+    }
+
+    fun getInvestorById(investorId: Int): InvestorEntity {
+        return investorRepository.findById(investorId).get()
     }
 }

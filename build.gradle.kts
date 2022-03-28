@@ -24,21 +24,21 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.6.4")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.6.4")
-    implementation("org.springframework.boot:spring-boot-starter-validation:2.6.4")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.6.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.6.5")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.6.5")
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.6.5")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.6.5")
     implementation("org.postgresql:postgresql:42.3.3")
-    implementation("org.flywaydb:flyway-core:8.5.2")
-    implementation("com.vladmihalcea:hibernate-types-52:2.14.0")
+    implementation("org.flywaydb:flyway-core:8.5.4")
+    implementation("com.vladmihalcea:hibernate-types-52:2.14.1")
     implementation("com.github.jsqlparser:jsqlparser:4.3")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // #JWT
-    implementation("com.auth0:java-jwt:3.18.3")
+    implementation("com.auth0:java-jwt:3.19.0")
     implementation("org.apache.httpcomponents:httpclient:4.5.13")
 
     implementation("io.github.microutils:kotlin-logging:2.1.21")
@@ -50,7 +50,7 @@ dependencies {
 
     //   #junit5 #mockk
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:3.1.1")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.5")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit5JupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit5JupiterVersion")
@@ -59,13 +59,15 @@ dependencies {
 
     testImplementation("com.ninja-squad:springmockk:$springMockKVersion")
     testImplementation("io.mockk:mockk:1.12.3")
+    testImplementation("com.nhaarman:mockito-kotlin:1.6.0")
+    testImplementation("org.mockito:mockito-inline:4.3.1")
 
     testImplementation("io.zonky.test:embedded-database-spring-test:2.1.1")
     testImplementation("org.assertj:assertj-db:2.0.2")
     testImplementation("org.hsqldb:hsqldb:2.6.1")
 
     // #devtool
-    developmentOnly("org.springframework.boot:spring-boot-devtools:2.6.4")
+    developmentOnly("org.springframework.boot:spring-boot-devtools:2.6.5")
 }
 
 tasks.withType<KotlinCompile> {

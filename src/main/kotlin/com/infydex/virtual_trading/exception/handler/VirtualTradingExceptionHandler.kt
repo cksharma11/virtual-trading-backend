@@ -1,6 +1,7 @@
 package com.infydex.virtual_trading.exception.handler
 
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
+import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.dto.ErrorResponse
 import org.slf4j.LoggerFactory
@@ -40,7 +41,7 @@ class VirtualTradingExceptionHandler {
             )
     }
 
-    @ExceptionHandler(InvalidInvestorIdException::class, Exception::class)
+    @ExceptionHandler(InvalidInvestorIdException::class, InvalidInvestorIdException::class)
     fun invalidInvestorIdExceptionHandler(exception: InvalidInvestorIdException): ResponseEntity<ErrorResponse> {
         val mostSpecificCause = NestedExceptionUtils.getMostSpecificCause(exception)
         logger.warn(exception.message, exception)
@@ -48,6 +49,19 @@ class VirtualTradingExceptionHandler {
             .body(
                 ErrorResponse(
                     status = HttpStatus.BAD_REQUEST.value(),
+                    message = mostSpecificCause.message ?: ""
+                )
+            )
+    }
+
+    @ExceptionHandler(InvalidLoginCredentialsException::class, InvalidLoginCredentialsException::class)
+    fun invalidLoginCredentialsExceptionHandler(exception: InvalidLoginCredentialsException): ResponseEntity<ErrorResponse> {
+        val mostSpecificCause = NestedExceptionUtils.getMostSpecificCause(exception)
+        logger.warn(exception.message, exception)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(
+                ErrorResponse(
+                    status = HttpStatus.UNAUTHORIZED.value(),
                     message = mostSpecificCause.message ?: ""
                 )
             )

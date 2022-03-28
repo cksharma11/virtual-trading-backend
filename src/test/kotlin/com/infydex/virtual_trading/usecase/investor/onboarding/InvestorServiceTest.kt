@@ -1,8 +1,5 @@
-package com.infydex.virtual_trading.usecase.investor
+package com.infydex.virtual_trading.usecase.investor.onboarding
 
-import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorRepository
-import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorService
-import com.infydex.virtual_trading.usecase.investor.onboarding.PinRepository
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
