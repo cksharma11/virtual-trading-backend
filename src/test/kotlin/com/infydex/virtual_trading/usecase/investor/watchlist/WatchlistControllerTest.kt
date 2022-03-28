@@ -1,5 +1,6 @@
 package com.infydex.virtual_trading.usecase.investor.watchlist
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.config.security.JwtIncomingRequestFilter
 import com.infydex.virtual_trading.config.security.TestAuthUtils
 import com.infydex.virtual_trading.usecase.investor.watchlist.entity.WatchlistEntity
@@ -31,7 +32,7 @@ internal class WatchlistControllerTest {
     @Test
     fun `should return watchlist for investor`() {
         BDDMockito.given(watchlistService.getWatchlist(1))
-            .willReturn(Optional.of(listOf(WatchlistEntity())))
+            .willReturn(Optional.of(listOf(WatchlistEntity().copy(stock = "WIPRO"))))
 
         mockMvc.perform(
             MockMvcRequestBuilders
@@ -44,6 +45,26 @@ internal class WatchlistControllerTest {
                 )
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().json("[{\"investorId\":1,\"stock\":\"\"}]"))
+            .andExpect(MockMvcResultMatchers.content().json("[\"WIPRO\"]"))
+    }
+
+    @Test
+    fun `should add stock to watchlist`() {
+        val addStockDto = ObjectMapper().createObjectNode()
+            .put("stock", "WIPRO")
+            .toString()
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.POST, "/virtual-trading/api/v1/watchlist/add-stock")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(addStockDto)
+                .header(
+                    JwtIncomingRequestFilter.X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isCreated)
     }
 }

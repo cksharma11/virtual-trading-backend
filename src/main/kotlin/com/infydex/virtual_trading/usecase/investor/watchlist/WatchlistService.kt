@@ -9,4 +9,8 @@ class WatchlistService(private val watchlistRepository: WatchlistRepository) {
     fun getWatchlist(investorId: Int): Optional<List<WatchlistEntity>> {
         return watchlistRepository.findAllByInvestorId(investorId)
     }
+
+    fun addStock(investorId: Int, stock: String) {
+        return watchlistRepository.addStock(investorId, stock)
+    }
 }

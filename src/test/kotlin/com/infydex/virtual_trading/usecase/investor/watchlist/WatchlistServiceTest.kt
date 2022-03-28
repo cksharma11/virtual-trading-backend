@@ -1,5 +1,6 @@
 package com.infydex.virtual_trading.usecase.investor.watchlist
 
+import com.nhaarman.mockito_kotlin.doNothing
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
@@ -26,6 +27,15 @@ internal class WatchlistServiceTest {
     fun `should return watchlist of investor`() {
         given(watchlistRepository.findAllByInvestorId(1))
             .willReturn(Optional.of(listOf()))
+
+        watchlistService.getWatchlist(1)
+
+        verify(watchlistRepository, times(1)).findAllByInvestorId(1)
+    }
+
+    @Test
+    fun `should add stock to watchlist`() {
+        doNothing().`when`(watchlistRepository).addStock(1, "WIPRO")
 
         watchlistService.getWatchlist(1)
 
