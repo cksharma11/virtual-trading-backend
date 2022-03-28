@@ -1,4 +1,4 @@
-package com.infydex.virtual_trading.usecase.investor.dto
+package com.infydex.virtual_trading.usecase.investor.onboarding.dto
 
 import org.hibernate.validator.constraints.Length
 import javax.validation.constraints.NotNull

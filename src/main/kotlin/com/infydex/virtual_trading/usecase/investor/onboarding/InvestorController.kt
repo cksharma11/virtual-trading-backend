@@ -1,9 +1,9 @@
-package com.infydex.virtual_trading.usecase.investor
+package com.infydex.virtual_trading.usecase.investor.onboarding
 
-import com.infydex.virtual_trading.usecase.investor.dto.InvestorSignupDto
-import com.infydex.virtual_trading.usecase.investor.dto.PinDto
-import com.infydex.virtual_trading.usecase.investor.entity.InvestorEntity
-import com.infydex.virtual_trading.usecase.investor.entity.PinEntity
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
+import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
+import com.infydex.virtual_trading.usecase.investor.onboarding.entity.PinEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*

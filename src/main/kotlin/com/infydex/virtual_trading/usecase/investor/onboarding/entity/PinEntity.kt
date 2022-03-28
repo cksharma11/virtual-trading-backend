@@ -1,4 +1,4 @@
-package com.infydex.virtual_trading.usecase.investor.entity
+package com.infydex.virtual_trading.usecase.investor.onboarding.entity
 
 import javax.persistence.*
 

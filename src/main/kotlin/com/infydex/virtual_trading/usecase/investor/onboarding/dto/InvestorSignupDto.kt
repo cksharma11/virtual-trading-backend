@@ -1,4 +1,4 @@
-package com.infydex.virtual_trading.usecase.investor.dto
+package com.infydex.virtual_trading.usecase.investor.onboarding.dto
 
 import com.infydex.virtual_trading.constraints.phone.ValidPhone
 

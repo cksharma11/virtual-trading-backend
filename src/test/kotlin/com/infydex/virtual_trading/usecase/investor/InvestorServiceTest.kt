@@ -1,9 +1,12 @@
 package com.infydex.virtual_trading.usecase.investor
 
-import com.infydex.virtual_trading.usecase.investor.dto.InvestorSignupDto
-import com.infydex.virtual_trading.usecase.investor.dto.PinDto
-import com.infydex.virtual_trading.usecase.investor.entity.InvestorEntity
-import com.infydex.virtual_trading.usecase.investor.entity.PinEntity
+import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorRepository
+import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorService
+import com.infydex.virtual_trading.usecase.investor.onboarding.PinRepository
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
+import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
+import com.infydex.virtual_trading.usecase.investor.onboarding.entity.PinEntity
 import org.junit.After
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

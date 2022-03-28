@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.handler.VirtualTradingExceptionHandler
-import com.infydex.virtual_trading.usecase.investor.dto.InvestorSignupDto
-import com.infydex.virtual_trading.usecase.investor.dto.PinDto
-import com.infydex.virtual_trading.usecase.investor.entity.InvestorEntity
-import com.infydex.virtual_trading.usecase.investor.entity.PinEntity
+import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorController
+import com.infydex.virtual_trading.usecase.investor.onboarding.InvestorService
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
+import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
+import com.infydex.virtual_trading.usecase.investor.onboarding.entity.PinEntity
 import org.junit.After
 import org.junit.Before
 import org.junit.jupiter.api.Test
