@@ -1,14 +1,16 @@
 package com.infydex.virtual_trading.usecase.investor.onboarding
 
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
+import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
+import com.infydex.virtual_trading.exception.InvestorDoesNotExistsException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.PinEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.transaction.Transactional
 
 @Service
@@ -34,11 +36,14 @@ class InvestorService(
         }
     }
 
-    fun login(investorLoginDto: InvestorLoginDto): PinEntity? {
-        return pinRepository.findByInvestorIdAndPin(investorLoginDto.investorId, investorLoginDto.pin)
+    @Transactional
+    fun login(investorLoginDto: InvestorLoginDto): PinEntity {
+        val pin = pinRepository.findByInvestorIdAndPin(investorLoginDto.investorId, investorLoginDto.pin)
+        return pin ?: throw InvalidLoginCredentialsException()
     }
 
+    @Transactional
     fun getInvestorById(investorId: Int): InvestorEntity {
-        return investorRepository.findById(investorId).get()
+        return investorRepository.findByIdOrNull(investorId) ?: throw InvestorDoesNotExistsException()
     }
 }

@@ -2,6 +2,7 @@ package com.infydex.virtual_trading.usecase.investor.onboarding
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
+import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.handler.VirtualTradingExceptionHandler
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
@@ -240,10 +241,10 @@ internal class InvestorControllerTest {
             .put("pin", "1111")
             .put("investorId", 1)
             .toString()
-        val investorLoginDto = InvestorLoginDto(investorId = 1, pin = "1234")
+        val investorLoginDto = InvestorLoginDto(investorId = 1, pin = "1111")
 
         given(investorService.login(investorLoginDto))
-            .willThrow(InvalidInvestorIdException())
+            .willThrow(InvalidLoginCredentialsException())
 
         given(investorService.getInvestorById(1))
             .willReturn(InvestorEntity().copy(phone = "9876543210", id = 1))

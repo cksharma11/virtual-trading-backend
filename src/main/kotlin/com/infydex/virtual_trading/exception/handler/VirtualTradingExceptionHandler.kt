@@ -2,6 +2,7 @@ package com.infydex.virtual_trading.exception.handler
 
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
+import com.infydex.virtual_trading.exception.InvestorDoesNotExistsException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.dto.ErrorResponse
 import org.slf4j.LoggerFactory
@@ -62,6 +63,19 @@ class VirtualTradingExceptionHandler {
             .body(
                 ErrorResponse(
                     status = HttpStatus.UNAUTHORIZED.value(),
+                    message = mostSpecificCause.message ?: ""
+                )
+            )
+    }
+
+    @ExceptionHandler(InvestorDoesNotExistsException::class, InvestorDoesNotExistsException::class)
+    fun investorDoesNotExistsExceptionHandler(exception: InvestorDoesNotExistsException): ResponseEntity<ErrorResponse> {
+        val mostSpecificCause = NestedExceptionUtils.getMostSpecificCause(exception)
+        logger.warn(exception.message, exception)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(
+                ErrorResponse(
+                    status = HttpStatus.NOT_FOUND.value(),
                     message = mostSpecificCause.message ?: ""
                 )
             )

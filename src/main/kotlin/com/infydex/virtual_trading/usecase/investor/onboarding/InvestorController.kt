@@ -1,6 +1,5 @@
 package com.infydex.virtual_trading.usecase.investor.onboarding
 
-import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
 import com.infydex.virtual_trading.jwt.JwtUtils
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginResponse
@@ -34,13 +33,11 @@ class InvestorController {
     @PostMapping("/login")
     fun createPin(@Valid @RequestBody investorLoginDto: InvestorLoginDto): InvestorLoginResponse {
         val pin = investorService.login(investorLoginDto)
-        if (pin != null) {
-            val investor = investorService.getInvestorById(investorLoginDto.investorId)
-            return InvestorLoginResponse(
-                investor = investor,
-                jwt = JwtUtils.createInvestorJWT(investor.id!!.toInt(), investor.phone)
-            )
-        }
-        throw InvalidLoginCredentialsException()
+        val investor = investorService.getInvestorById(pin.investorId)
+
+        return InvestorLoginResponse(
+            investor = investor,
+            jwt = JwtUtils.createInvestorJWT(investor.id!!.toInt(), investor.phone)
+        )
     }
 }

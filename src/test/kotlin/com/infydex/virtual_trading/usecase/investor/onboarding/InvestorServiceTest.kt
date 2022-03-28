@@ -1,5 +1,6 @@
 package com.infydex.virtual_trading.usecase.investor.onboarding
 
+import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.entity.InvestorEntity
@@ -8,14 +9,14 @@ import org.junit.After
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
-import org.mockito.BDDMockito.any
-import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import java.util.*
 
 @RunWith(MockitoJUnitRunner::class)
 internal class InvestorServiceTest {
@@ -51,6 +52,24 @@ internal class InvestorServiceTest {
         investorService.createPin(pinDto)
 
         verify(pinRepository).save(any(PinEntity::class.java))
+    }
+
+    @Test
+    fun `should return pinEntity for valid login`() {
+        given(pinRepository.findByInvestorIdAndPin(anyInt(), anyString())).willReturn(PinEntity())
+
+        investorService.login(InvestorLoginDto(pin = "1234", investorId = 1))
+
+        verify(pinRepository, times(1)).findByInvestorIdAndPin(anyInt(), anyString())
+    }
+
+    @Test
+    fun `should get investor by id`() {
+        given(investorRepository.findById(anyInt())).willReturn(Optional.of(InvestorEntity()))
+
+        investorService.getInvestorById(1)
+
+        verify(investorRepository, times(1)).findById(anyInt())
     }
 
     @After

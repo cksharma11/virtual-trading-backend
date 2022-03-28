@@ -8,15 +8,15 @@ object TestAuthUtils {
     private val objectMapper: ObjectMapper = jacksonObjectMapper()
 
     fun createJWTPayload(
-        username: String = DEFAULT_USER,
+        userId: String = DEFAULT_USER,
         entitlements: Array<String> = arrayOf("infydex.investor")
     ): String {
         val jwtPayload: Map<String, Any> =
             mapOf(
-                "sub" to username,
+                "sub" to userId,
                 "user" to mapOf(
                     "entitlements" to entitlements,
-                    "name" to arrayOf(username),
+                    "name" to arrayOf(userId),
                 )
             )
         return objectMapper.writeValueAsString(jwtPayload)

@@ -27,7 +27,7 @@ internal class JwtIncomingRequestFilterTest {
             MockMvcRequestBuilders
                 .request(HttpMethod.GET, "/virtual-trading/api/auth-test-endpoint")
                 .contextPath("/virtual-trading")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isForbidden)
     }
@@ -41,7 +41,7 @@ internal class JwtIncomingRequestFilterTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(
                     X_JWT_PAYLOAD,
-                    TestAuthUtils.createJWTPayload(username = "test-user")
+                    TestAuthUtils.createJWTPayload(userId = "test-user")
                 )
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
