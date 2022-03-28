@@ -234,6 +234,34 @@ internal class InvestorControllerTest {
         }
     }
 
+    @Test
+    fun `should return 401 unauthorised when provided incorrect login details`() {
+        val investorLoginDtoPayload = ObjectMapper().createObjectNode()
+            .put("pin", "1111")
+            .put("investorId", 1)
+            .toString()
+        val investorLoginDto = InvestorLoginDto(investorId = 1, pin = "1234")
+
+        given(investorService.login(investorLoginDto))
+            .willThrow(InvalidInvestorIdException())
+
+        given(investorService.getInvestorById(1))
+            .willReturn(InvestorEntity().copy(phone = "9876543210", id = 1))
+
+        mockMvc.post("/api/v1/investor/login") {
+            contentType = MediaType.APPLICATION_JSON
+            content = investorLoginDtoPayload
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status {
+                isUnauthorized()
+                content {
+                    json("{\"status\":401,\"message\":\"Invalid login credentials\",\"errorType\":\"\"}")
+                }
+            }
+        }
+    }
+
     @After
     fun tearDown() {
         Mockito.verifyNoMoreInteractions(investorService)
