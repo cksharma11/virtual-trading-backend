@@ -49,7 +49,9 @@ CREATE TABLE IF NOT EXISTS watchlist
     id          SERIAL PRIMARY KEY,
     investor_id SERIAL,
     created_at  TIMESTAMP DEFAULT now(),
-    stocks      TEXT[],
+    stock       VARCHAR(200),
+    CONSTRAINT uniq_watchlist
+        UNIQUE (investor_id, stock),
     CONSTRAINT fk_investor_id
         FOREIGN KEY (investor_id)
             REFERENCES investor (id)

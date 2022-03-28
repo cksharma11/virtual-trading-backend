@@ -3,7 +3,6 @@ package com.infydex.virtual_trading.usecase.investor.onboarding
 import com.infydex.virtual_trading.exception.InvalidInvestorIdException
 import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
 import com.infydex.virtual_trading.exception.InvestorDoesNotExistsException
-import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorLoginDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.InvestorSignupDto
 import com.infydex.virtual_trading.usecase.investor.onboarding.dto.PinDto
@@ -20,11 +19,7 @@ class InvestorService(
 ) {
     @Transactional
     fun signup(investorSignupDto: InvestorSignupDto): InvestorEntity {
-        try {
-            return investorRepository.save(InvestorEntity().copy(phone = investorSignupDto.phone))
-        } catch (ex: Exception) {
-            throw PhoneNumberAlreadyRegisteredException()
-        }
+        return investorRepository.save(InvestorEntity().copy(phone = investorSignupDto.phone))
     }
 
     @Transactional

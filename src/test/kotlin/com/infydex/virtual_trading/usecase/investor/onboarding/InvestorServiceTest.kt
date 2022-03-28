@@ -36,7 +36,7 @@ internal class InvestorServiceTest {
 
     @Test
     fun `should create investor in database if not exists with phone number`() {
-        given(investorRepository.save(any(InvestorEntity::class.java))).willReturn(InvestorEntity())
+        given(investorRepository.save(any(InvestorEntity::class.java))).willReturn(InvestorEntity().copy(id = 1))
 
         val investor = InvestorSignupDto(phone = "1234567890")
         investorService.signup(investor)
