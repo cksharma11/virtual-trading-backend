@@ -2,7 +2,7 @@
 
 ## Github Stats
 <a href="https://github.com/cksharma11/virtual-trading-backend/actions">
-  <img alt="Tests Passing" src="https://github.com/cksharma11/virtual-trading-backend/workflows/Virtual%20Trading/badge.svg" />
+  <img alt="Tests Passing" src="https://github.com/cksharma11/virtual-trading-backend/workflows/Build/badge.svg" />
 </a>
 
 ## Description 

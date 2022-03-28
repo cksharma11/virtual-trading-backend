@@ -1,4 +1,4 @@
-name: Virtual Trading
+name: Build
 
 on:
   push:
