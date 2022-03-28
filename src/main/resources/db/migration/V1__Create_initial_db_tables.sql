@@ -18,12 +18,10 @@ CREATE TABLE IF NOT EXISTS pin
             REFERENCES investor (id)
 );
 
-CREATE TYPE TRANSACTION_TYPE AS ENUM ('CREDIT', 'DEBIT');
-
 CREATE TABLE IF NOT EXISTS fund
 (
     id               SERIAL PRIMARY KEY,
-    transaction_type TRANSACTION_TYPE,
+    transaction_type VARCHAR(100),
     investor_id      SERIAL,
     amount           DECIMAL,
     created_at       TIMESTAMP DEFAULT now(),

@@ -5,6 +5,7 @@ import com.infydex.virtual_trading.exception.InvalidLoginCredentialsException
 import com.infydex.virtual_trading.exception.InvestorDoesNotExistsException
 import com.infydex.virtual_trading.exception.PhoneNumberAlreadyRegisteredException
 import com.infydex.virtual_trading.exception.dto.ErrorResponse
+import com.infydex.virtual_trading.exception.message.ErrorMessage
 import org.slf4j.LoggerFactory
 import org.springframework.core.NestedExceptionUtils
 import org.springframework.dao.DuplicateKeyException
@@ -18,6 +19,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class VirtualTradingExceptionHandler {
     val logger = LoggerFactory.getLogger(this.javaClass.name)!!
+
+    @ExceptionHandler(Exception::class)
+    fun globalExceptionHandler(exception: Exception): ResponseEntity<ErrorResponse> {
+        logger.warn(exception.message, exception)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(
+                ErrorResponse(
+                    status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    message = ErrorMessage.INTERNAL_SERVER_ERROR
+                )
+            )
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun methodArgumentNotValidExceptionHandler(exception: MethodArgumentNotValidException): ResponseEntity<MutableMap<String, String?>> {

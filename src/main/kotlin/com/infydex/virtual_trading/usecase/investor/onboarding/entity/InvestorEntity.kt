@@ -10,7 +10,7 @@ data class InvestorEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    val id: Long? = null,
+    val id: Int? = null,
 
     @Column(name = "name", nullable = true)
     val name: String? = null,
