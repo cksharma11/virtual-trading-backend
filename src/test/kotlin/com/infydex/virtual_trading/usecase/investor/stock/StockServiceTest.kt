@@ -1,6 +1,7 @@
 package com.infydex.virtual_trading.usecase.investor.stock
 
 import com.infydex.virtual_trading.exception.InsufficientFundException
+import com.infydex.virtual_trading.exception.InsufficientHoldingException
 import com.infydex.virtual_trading.usecase.investor.fund.FundRepository
 import com.infydex.virtual_trading.usecase.investor.fund.FundService
 import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
@@ -14,7 +15,7 @@ import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.BDDMockito.any
+import org.mockito.BDDMockito.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
@@ -93,5 +94,66 @@ internal class StockServiceTest {
         )
 
         assertThrows<InsufficientFundException> { stockService.buy(1, stockTransactionDto) }
+    }
+
+    @Test
+    fun `should create sell transaction in db`() {
+        val holdings = listOf(
+            StockEntity().copy(
+                stockSymbol = "WIPRO",
+                quantity = 10,
+                status = TransactionStatus.COMPLETED
+            )
+        )
+
+        given(stockRepository.save(any(StockEntity::class.java)))
+            .willReturn(StockEntity())
+
+        given(stockRepository.findAllByInvestorIdAndStockSymbol(anyInt(), anyString()))
+            .willReturn(holdings)
+
+        val stockTransactionDto = StockTransactionDto(
+            stockSymbol = "WIPRO",
+            price = 100.0,
+            quantity = 10
+        )
+
+        stockService.sell(1, stockTransactionDto)
+
+        verify(stockRepository).save(
+            StockEntity(
+                investorId = 1,
+                stockSymbol = stockTransactionDto.stockSymbol,
+                quantity = stockTransactionDto.quantity,
+                type = StockTransactionType.SELL,
+                price = stockTransactionDto.price,
+                status = TransactionStatus.COMPLETED
+            )
+        )
+    }
+
+    @Test
+    fun `should two insufficient holding exception when does not have enough holding`() {
+        val holdings = listOf(
+            StockEntity().copy(
+                stockSymbol = "WIPRO",
+                quantity = 10,
+                status = TransactionStatus.COMPLETED
+            )
+        )
+
+        given(stockRepository.save(any(StockEntity::class.java)))
+            .willReturn(StockEntity())
+
+        given(stockRepository.findAllByInvestorIdAndStockSymbol(anyInt(), anyString()))
+            .willReturn(holdings)
+
+        val stockTransactionDto = StockTransactionDto(
+            stockSymbol = "WIPRO",
+            price = 100.0,
+            quantity = 100
+        )
+
+        assertThrows<InsufficientHoldingException> { stockService.sell(1, stockTransactionDto) }
     }
 }

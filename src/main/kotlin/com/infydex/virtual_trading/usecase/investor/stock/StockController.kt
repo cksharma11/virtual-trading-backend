@@ -20,4 +20,11 @@ class StockController {
         val investorId = request.userPrincipal.name
         return stockService.buy(investorId.toInt(), stockTransactionDto)
     }
+
+    @PostMapping("/sell")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    fun sell(@Valid @RequestBody stockTransactionDto: StockTransactionDto, request: HttpServletRequest): StockEntity {
+        val investorId = request.userPrincipal.name
+        return stockService.sell(investorId.toInt(), stockTransactionDto)
+    }
 }

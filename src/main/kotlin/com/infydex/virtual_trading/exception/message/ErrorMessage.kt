@@ -1,6 +1,7 @@
 package com.infydex.virtual_trading.exception.message
 
 object ErrorMessage {
+    val INSUFFICIENT_HOLDING = "Insufficient holding"
     val INSUFFICIENT_FUND = "Insufficient fund"
     val INTERNAL_SERVER_ERROR = "Internal server error"
     val INVESTOR_DOES_NOT_EXISTS = "Investor does not exists with given investor id"

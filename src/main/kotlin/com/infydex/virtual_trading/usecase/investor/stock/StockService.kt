@@ -1,6 +1,7 @@
 package com.infydex.virtual_trading.usecase.investor.stock
 
 import com.infydex.virtual_trading.exception.InsufficientFundException
+import com.infydex.virtual_trading.exception.InsufficientHoldingException
 import com.infydex.virtual_trading.usecase.investor.fund.FundRepository
 import com.infydex.virtual_trading.usecase.investor.fund.FundService
 import com.infydex.virtual_trading.usecase.investor.fund.dto.AddFundDto
@@ -37,6 +38,30 @@ class StockService(
                 stockSymbol = stockTransactionDto.stockSymbol,
                 quantity = stockTransactionDto.quantity,
                 type = StockTransactionType.BUY,
+                price = stockTransactionDto.price,
+                status = TransactionStatus.COMPLETED
+            )
+        )
+    }
+
+    @Transactional
+    fun sell(investorId: Int, stockTransactionDto: StockTransactionDto): StockEntity {
+        val stocksCost = StockUtil.getStockCost(stockTransactionDto)
+        val investorHolding =
+            stockRepository.findAllByInvestorIdAndStockSymbol(investorId, stockTransactionDto.stockSymbol)
+
+        if (!StockUtil.hasEnoughHolding(investorHolding, stockTransactionDto)) {
+            throw InsufficientHoldingException()
+        }
+
+        fundService.createFundEntry(investorId, AddFundDto(amount = stocksCost), TransactionType.CREDIT)
+
+        return stockRepository.save(
+            StockEntity().copy(
+                investorId = investorId,
+                stockSymbol = stockTransactionDto.stockSymbol,
+                quantity = stockTransactionDto.quantity,
+                type = StockTransactionType.SELL,
                 price = stockTransactionDto.price,
                 status = TransactionStatus.COMPLETED
             )

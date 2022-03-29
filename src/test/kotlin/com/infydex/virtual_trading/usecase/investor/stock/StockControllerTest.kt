@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.config.security.JwtIncomingRequestFilter
 import com.infydex.virtual_trading.config.security.TestAuthUtils
 import com.infydex.virtual_trading.exception.InsufficientFundException
+import com.infydex.virtual_trading.exception.InsufficientHoldingException
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.entity.StockEntity
 import org.junit.jupiter.api.Test
@@ -90,6 +91,75 @@ internal class StockControllerTest {
                 )
         )
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
-            .andExpect(MockMvcResultMatchers.content().json("{\"status\":400,\"message\":\"Insufficient fund\",\"errorType\":\"\"}"))
+            .andExpect(
+                MockMvcResultMatchers.content()
+                    .json("{\"status\":400,\"message\":\"Insufficient fund\",\"errorType\":\"\"}")
+            )
+    }
+
+    @Test
+    fun `should place sell order when have stocks for sell`() {
+        val buyTransactionDto = ObjectMapper().createObjectNode()
+            .put("stockSymbol", "WIPRO")
+            .put("price", 100.0)
+            .put("quantity", 10)
+            .toString()
+
+        val stockTransaction = StockTransactionDto(
+            stockSymbol = "WIPRO",
+            quantity = 10,
+            price = 100.0
+        )
+
+        BDDMockito.given(stockService.sell(1, stockTransaction))
+            .willReturn(StockEntity().copy(stockSymbol = "WIPRO"))
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.POST, "/virtual-trading/api/v1/stock/sell")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(buyTransactionDto)
+                .header(
+                    JwtIncomingRequestFilter.X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isCreated)
+    }
+
+    @Test
+    fun `should throw Insufficient holding exception if not have holdings for sell`() {
+        val buyTransactionDto = ObjectMapper().createObjectNode()
+            .put("stockSymbol", "WIPRO")
+            .put("price", 100.0)
+            .put("quantity", 10)
+            .toString()
+
+        val stockTransaction = StockTransactionDto(
+            stockSymbol = "WIPRO",
+            quantity = 10,
+            price = 100.0
+        )
+
+        BDDMockito.given(stockService.sell(1, stockTransaction))
+            .willThrow(InsufficientHoldingException())
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.POST, "/virtual-trading/api/v1/stock/sell")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(buyTransactionDto)
+                .header(
+                    JwtIncomingRequestFilter.X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(
+                MockMvcResultMatchers.content()
+                    .json("{\"status\":400,\"message\":\"Insufficient holding\",\"errorType\":\"\"}")
+            )
     }
 }

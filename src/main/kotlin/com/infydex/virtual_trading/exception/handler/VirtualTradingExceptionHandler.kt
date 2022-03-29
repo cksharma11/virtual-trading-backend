@@ -103,4 +103,17 @@ class VirtualTradingExceptionHandler {
                 )
             )
     }
+
+    @ExceptionHandler(InsufficientHoldingException::class, InsufficientHoldingException::class)
+    fun insufficientHoldingExceptionHandler(exception: InsufficientHoldingException): ResponseEntity<ErrorResponse> {
+        val mostSpecificCause = NestedExceptionUtils.getMostSpecificCause(exception)
+        logger.warn(exception.message, exception)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(
+                ErrorResponse(
+                    status = HttpStatus.BAD_REQUEST.value(),
+                    message = mostSpecificCause.message ?: ""
+                )
+            )
+    }
 }
