@@ -183,13 +183,41 @@ internal class StockControllerTest {
                 .request(HttpMethod.GET, "/virtual-trading/api/v1/stock/holdings")
                 .contextPath("/virtual-trading")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
                 .header(
                     JwtIncomingRequestFilter.X_JWT_PAYLOAD,
                     TestAuthUtils.createJWTPayload(userId = "1")
                 )
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().json("[{\"stockSymbol\":\"WIPRO\",\"quantity\":10,\"averagePrice\":100.0,\"cost\":1000.0}]"))
+            .andExpect(
+                MockMvcResultMatchers.content()
+                    .json("[{\"stockSymbol\":\"WIPRO\",\"quantity\":10,\"averagePrice\":100.0,\"cost\":1000.0}]")
+            )
+    }
+
+    @Test
+    fun `should return all transaction of investor`() {
+        val transactions = listOf(
+            StockEntity().copy(stockSymbol = "WIPRO", price = 10.0, quantity = 10)
+        )
+
+        BDDMockito.given(stockService.transactions(1))
+            .willReturn(transactions)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/virtual-trading/api/v1/stock/transactions")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(
+                    JwtIncomingRequestFilter.X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(
+                MockMvcResultMatchers.content()
+                    .json("[{\"investorId\":1,\"type\":\"BUY\",\"stockSymbol\":\"WIPRO\",\"price\":10.0,\"quantity\":10,\"status\":\"COMPLETED\"}]")
+            )
     }
 }

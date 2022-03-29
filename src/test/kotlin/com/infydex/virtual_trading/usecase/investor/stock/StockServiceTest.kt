@@ -192,4 +192,24 @@ internal class StockServiceTest {
 
         assertEquals(expected, stockService.holdings(1))
     }
+
+    @Test
+    fun `should return all stocks transactions`() {
+        val transactions = listOf(
+            StockEntity().copy(
+                stockSymbol = "WIPRO",
+                quantity = 20,
+                price = 100.0,
+                type = StockTransactionType.BUY,
+                status = TransactionStatus.COMPLETED
+            )
+        )
+
+        given(stockRepository.findAllByInvestorId(anyInt()))
+            .willReturn(transactions)
+
+        stockService.transactions(1)
+
+        verify(stockRepository).findAllByInvestorId(1)
+    }
 }

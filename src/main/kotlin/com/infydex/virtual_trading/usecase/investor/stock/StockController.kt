@@ -34,4 +34,10 @@ class StockController {
         val investorId = request.userPrincipal.name
         return stockService.holdings(investorId.toInt())
     }
+
+    @GetMapping("/transactions")
+    fun transactions(request: HttpServletRequest): List<StockEntity> {
+        val investorId = request.userPrincipal.name
+        return stockService.transactions(investorId.toInt())
+    }
 }

@@ -73,4 +73,8 @@ class StockService(
         val transactions = stockRepository.findAllByInvestorId(investorId)
         return StockUtil.getHoldings(transactions)
     }
+
+    fun transactions(investorId: Int): List<StockEntity> {
+        return stockRepository.findAllByInvestorId(investorId)
+    }
 }
