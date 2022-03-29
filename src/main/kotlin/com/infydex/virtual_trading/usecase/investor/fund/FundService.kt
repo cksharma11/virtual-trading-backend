@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service
 class FundService(
     private val fundRepository: FundRepository,
 ) {
-    fun addFund(investorId: Int, addFundDto: AddFundDto): FundEntity {
+    fun createFundEntry(investorId: Int, addFundDto: AddFundDto, transactionType: TransactionType): FundEntity {
         try {
             return fundRepository.save(
                 FundEntity().copy(
                     investorId = investorId,
                     amount = addFundDto.amount,
-                    transactionType = TransactionType.CREDIT
+                    transactionType = transactionType
                 )
             )
         } catch (ex: Exception) {

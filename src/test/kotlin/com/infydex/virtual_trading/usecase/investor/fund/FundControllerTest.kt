@@ -5,6 +5,7 @@ import com.infydex.virtual_trading.config.security.JwtIncomingRequestFilter.Comp
 import com.infydex.virtual_trading.config.security.TestAuthUtils
 import com.infydex.virtual_trading.usecase.investor.fund.dto.AddFundDto
 import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
+import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
 import com.nhaarman.mockito_kotlin.times
 import org.junit.jupiter.api.Test
 import org.junit.runner.RunWith
@@ -36,7 +37,7 @@ internal class FundControllerTest {
         val addFundDto = AddFundDto(amount = 200.0)
         val addAmountPayload = ObjectMapper().createObjectNode().put("amount", "200").toString()
 
-        BDDMockito.given(fundService.addFund(1, addFundDto))
+        BDDMockito.given(fundService.createFundEntry(1, addFundDto, TransactionType.CREDIT))
             .willReturn(FundEntity().copy(amount = 200.0, investorId = 1))
 
         mockMvc.perform(
@@ -52,6 +53,6 @@ internal class FundControllerTest {
         )
             .andExpect(MockMvcResultMatchers.status().isCreated)
 
-        Mockito.verify(fundService, times(1)).addFund(1, addFundDto)
+        Mockito.verify(fundService, times(1)).createFundEntry(1, addFundDto, TransactionType.CREDIT)
     }
 }

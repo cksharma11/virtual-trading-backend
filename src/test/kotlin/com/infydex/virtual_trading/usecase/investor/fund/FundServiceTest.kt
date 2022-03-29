@@ -2,6 +2,7 @@ package com.infydex.virtual_trading.usecase.investor.fund
 
 import com.infydex.virtual_trading.usecase.investor.fund.dto.AddFundDto
 import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
+import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.BeforeEach
@@ -30,7 +31,7 @@ internal class FundServiceTest {
             .willReturn(FundEntity())
 
         val addFundDto = AddFundDto(amount = 200.0)
-        fundService.addFund(1, addFundDto)
+        fundService.createFundEntry(1, addFundDto, TransactionType.CREDIT)
 
         verify(fundRepository, times(1)).save(any(FundEntity::class.java))
     }

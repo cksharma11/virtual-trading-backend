@@ -2,13 +2,7 @@ package com.infydex.virtual_trading.usecase.investor.stock.dto
 
 import javax.validation.constraints.NotNull
 
-data class BuyStockDto(
-    @NotNull
-    val type: StockTransactionType,
-
-    @NotNull
-    val investorId: Int,
-
+data class StockTransactionDto(
     @NotNull
     val stockSymbol: String,
 

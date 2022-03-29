@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS investment
     type         VARCHAR(64),
     investor_id  SERIAL,
     stock_symbol VARCHAR(200),
+    quantity     INT,
     status       VARCHAR(200),
     price        DECIMAL,
     created_at   TIMESTAMP DEFAULT now(),
