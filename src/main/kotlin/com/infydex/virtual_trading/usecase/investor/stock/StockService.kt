@@ -2,7 +2,6 @@ package com.infydex.virtual_trading.usecase.investor.stock
 
 import com.infydex.virtual_trading.exception.InsufficientFundException
 import com.infydex.virtual_trading.exception.InsufficientHoldingException
-import com.infydex.virtual_trading.usecase.investor.fund.FundRepository
 import com.infydex.virtual_trading.usecase.investor.fund.FundService
 import com.infydex.virtual_trading.usecase.investor.fund.dto.AddFundDto
 import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
@@ -17,13 +16,11 @@ import javax.transaction.Transactional
 @Service
 class StockService(
     private val stockRepository: StockRepository,
-    private val fundRepository: FundRepository,
     private val fundService: FundService
 ) {
     @Transactional
     fun buy(investorId: Int, stockTransactionDto: StockTransactionDto): StockEntity {
-        val investorFunds = fundRepository.findAllByInvestorId(investorId)
-        val currentBalance = StockUtil.getCurrentBalance(investorFunds)
+        val currentBalance = fundService.getAvailableFund(investorId).fund
 
         val stocksCost = StockUtil.getStockCost(stockTransactionDto)
 

@@ -4,8 +4,7 @@ import com.infydex.virtual_trading.exception.InsufficientFundException
 import com.infydex.virtual_trading.exception.InsufficientHoldingException
 import com.infydex.virtual_trading.usecase.investor.fund.FundRepository
 import com.infydex.virtual_trading.usecase.investor.fund.FundService
-import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
-import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
+import com.infydex.virtual_trading.usecase.investor.fund.dto.FundResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.HoldingResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionType
@@ -38,7 +37,7 @@ internal class StockServiceTest {
     @BeforeEach
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-        stockService = StockService(stockRepository, fundRepository, fundService)
+        stockService = StockService(stockRepository, fundService)
     }
 
     @Test
@@ -46,14 +45,7 @@ internal class StockServiceTest {
         given(stockRepository.save(any(StockEntity::class.java)))
             .willReturn(StockEntity())
 
-        given(fundRepository.findAllByInvestorId(1)).willReturn(
-            listOf(
-                FundEntity().copy(
-                    amount = 1000.0,
-                    transactionType = TransactionType.CREDIT
-                )
-            )
-        )
+        given(fundService.getAvailableFund(anyInt())).willReturn(FundResponseDto(fund = 10000.0))
 
         val stockTransactionDto = StockTransactionDto(
             stockSymbol = "WIPRO",
@@ -80,14 +72,7 @@ internal class StockServiceTest {
         given(stockRepository.save(any(StockEntity::class.java)))
             .willReturn(StockEntity())
 
-        given(fundRepository.findAllByInvestorId(1)).willReturn(
-            listOf(
-                FundEntity().copy(
-                    amount = 1000.0,
-                    transactionType = TransactionType.CREDIT
-                )
-            )
-        )
+        given(fundService.getAvailableFund(anyInt())).willReturn(FundResponseDto(fund = 100.0))
 
         val stockTransactionDto = StockTransactionDto(
             stockSymbol = "WIPRO",

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.infydex.virtual_trading.config.security.JwtIncomingRequestFilter.Companion.X_JWT_PAYLOAD
 import com.infydex.virtual_trading.config.security.TestAuthUtils
 import com.infydex.virtual_trading.usecase.investor.fund.dto.AddFundDto
+import com.infydex.virtual_trading.usecase.investor.fund.dto.FundResponseDto
 import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
 import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
 import com.nhaarman.mockito_kotlin.times
@@ -54,5 +55,26 @@ internal class FundControllerTest {
             .andExpect(MockMvcResultMatchers.status().isCreated)
 
         Mockito.verify(fundService, times(1)).createFundEntry(1, addFundDto, TransactionType.CREDIT)
+    }
+
+    @Test
+    fun `should return available fund for investor`() {
+        BDDMockito.given(fundService.getAvailableFund(1))
+            .willReturn(FundResponseDto(fund = 1000.0))
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/virtual-trading/api/v1/fund/")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(
+                    X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().json("{\"fund\":1000.0}"))
+
+        Mockito.verify(fundService, times(1)).getAvailableFund(1)
     }
 }
