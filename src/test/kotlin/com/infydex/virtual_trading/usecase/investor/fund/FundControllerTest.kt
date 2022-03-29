@@ -42,7 +42,7 @@ internal class FundControllerTest {
 
         mockMvc.perform(
             MockMvcRequestBuilders
-                .request(HttpMethod.POST, "/virtual-trading/api/v1/fund/add-fund")
+                .request(HttpMethod.POST, "/virtual-trading/api/v1/fund/add")
                 .contextPath("/virtual-trading")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(addAmountPayload)

@@ -15,7 +15,7 @@ class FundController {
     @Autowired
     lateinit var fundService: FundService
 
-    @PostMapping("/add-fund")
+    @PostMapping("/add")
     @ResponseStatus(code = HttpStatus.CREATED)
     fun addFund(@Valid @RequestBody addFundDto: AddFundDto, request: HttpServletRequest): FundEntity {
         val investorId = request.userPrincipal.name
