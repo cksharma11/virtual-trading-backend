@@ -14,4 +14,6 @@ interface WatchlistRepository : JpaRepository<WatchlistEntity, Any> {
     @Query(value = "insert into watchlist (investor_id, stock) VALUES (:investorId, :stock)", nativeQuery = true)
     @Transactional
     fun addStock(investorId: Int, stock: String)
+
+    fun deleteByInvestorIdAndStock(investorId: Int, stock: String): Int
 }

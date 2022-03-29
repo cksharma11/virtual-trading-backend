@@ -41,4 +41,14 @@ internal class WatchlistServiceTest {
 
         verify(watchlistRepository, times(1)).findAllByInvestorId(1)
     }
+
+    @Test
+    fun `should remove stock from watchlist table`() {
+        given(watchlistRepository.deleteByInvestorIdAndStock(1, "WIPRO"))
+            .willReturn(1)
+
+        watchlistService.removeStock(1, "WIPRO")
+
+        verify(watchlistRepository, times(1)).deleteByInvestorIdAndStock(1, "WIPRO")
+    }
 }

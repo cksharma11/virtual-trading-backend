@@ -1,6 +1,7 @@
 package com.infydex.virtual_trading.usecase.investor.watchlist
 
-import com.infydex.virtual_trading.usecase.investor.watchlist.dto.AddStockDto
+import com.infydex.virtual_trading.usecase.investor.watchlist.dto.RemoveStockResponse
+import com.infydex.virtual_trading.usecase.investor.watchlist.dto.WatchlistStockDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -23,8 +24,14 @@ class WatchlistController {
 
     @PostMapping("/add-stock")
     @ResponseStatus(code = HttpStatus.CREATED)
-    fun addStock(@Valid @RequestBody addStockDto: AddStockDto, request: HttpServletRequest) {
+    fun addStock(@Valid @RequestBody watchlistStockDto: WatchlistStockDto, request: HttpServletRequest) {
         val investorId = request.userPrincipal.name
-        return watchlistService.addStock(investorId.toInt(), addStockDto.stock)
+        return watchlistService.addStock(investorId.toInt(), watchlistStockDto.stock)
+    }
+
+    @PostMapping("/remove-stock")
+    fun removeStock(@Valid @RequestBody watchlistStockDto: WatchlistStockDto, request: HttpServletRequest): RemoveStockResponse {
+        val investorId = request.userPrincipal.name
+        return RemoveStockResponse(status = watchlistService.removeStock(investorId.toInt(), watchlistStockDto.stock))
     }
 }

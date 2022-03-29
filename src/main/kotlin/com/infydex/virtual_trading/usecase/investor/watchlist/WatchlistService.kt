@@ -13,4 +13,8 @@ class WatchlistService(private val watchlistRepository: WatchlistRepository) {
     fun addStock(investorId: Int, stock: String) {
         return watchlistRepository.addStock(investorId, stock)
     }
+
+    fun removeStock(investorId: Int, stock: String): Int {
+        return watchlistRepository.deleteByInvestorIdAndStock(investorId, stock)
+    }
 }

@@ -67,4 +67,28 @@ internal class WatchlistControllerTest {
         )
             .andExpect(MockMvcResultMatchers.status().isCreated)
     }
+
+    @Test
+    fun `should remove stock from watchlist`() {
+        val addStockDto = ObjectMapper().createObjectNode()
+            .put("stock", "WIPRO")
+            .toString()
+
+        BDDMockito.given(watchlistService.removeStock(1, "WIPRO"))
+            .willReturn(1)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.POST, "/virtual-trading/api/v1/watchlist/remove-stock")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(addStockDto)
+                .header(
+                    JwtIncomingRequestFilter.X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().json("{\"status\":1}"))
+    }
 }
