@@ -9,6 +9,7 @@ import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
+import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -112,6 +113,19 @@ class VirtualTradingExceptionHandler {
             .body(
                 ErrorResponse(
                     status = HttpStatus.BAD_REQUEST.value(),
+                    message = mostSpecificCause.message ?: ""
+                )
+            )
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
+    fun methodNotSupportedExceptionHandler(exception: HttpRequestMethodNotSupportedException): ResponseEntity<ErrorResponse> {
+        val mostSpecificCause = NestedExceptionUtils.getMostSpecificCause(exception)
+        logger.warn(exception.message, exception)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(
+                ErrorResponse(
+                    status = HttpStatus.NOT_FOUND.value(),
                     message = mostSpecificCause.message ?: ""
                 )
             )
