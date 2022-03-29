@@ -1,5 +1,6 @@
 package com.infydex.virtual_trading.usecase.investor.stock
 
+import com.infydex.virtual_trading.usecase.investor.stock.dto.HoldingResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.entity.StockEntity
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,5 +27,11 @@ class StockController {
     fun sell(@Valid @RequestBody stockTransactionDto: StockTransactionDto, request: HttpServletRequest): StockEntity {
         val investorId = request.userPrincipal.name
         return stockService.sell(investorId.toInt(), stockTransactionDto)
+    }
+
+    @GetMapping("/holdings")
+    fun holdings(request: HttpServletRequest): List<HoldingResponseDto> {
+        val investorId = request.userPrincipal.name
+        return stockService.holdings(investorId.toInt())
     }
 }

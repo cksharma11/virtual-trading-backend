@@ -2,6 +2,7 @@ package com.infydex.virtual_trading.usecase.investor.stock
 
 import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
 import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
+import com.infydex.virtual_trading.usecase.investor.stock.dto.HoldingResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionType
 import com.infydex.virtual_trading.usecase.investor.stock.entity.StockEntity
@@ -27,6 +28,28 @@ object StockUtil {
         return count
     }
 
+    private fun createHoldingDto(holdings: List<StockEntity>): HoldingResponseDto {
+        var count = 0
+        var cost = 0.0
+
+        for (holding in holdings) {
+            if (holding.type == StockTransactionType.SELL) {
+                count -= holding.quantity
+                cost -= holding.price * (holding.quantity)
+            } else {
+                count += holding.quantity
+                cost += holding.price * (holding.quantity)
+            }
+        }
+
+        return HoldingResponseDto(
+            stockSymbol = holdings[0].stockSymbol,
+            quantity = count,
+            averagePrice = cost / count,
+            cost = cost
+        )
+    }
+
     fun getCurrentBalance(investorFunds: List<FundEntity>): Double {
         return investorFunds.fold(0.0) { acc, fundEntity ->
             addOrRemoveFund(acc, fundEntity)
@@ -48,5 +71,11 @@ object StockUtil {
         }
 
         return currentStockHolding >= transactionDto.quantity
+    }
+
+    fun getHoldings(transactions: List<StockEntity>): List<HoldingResponseDto> {
+        val groupedHoldings = transactions.groupBy { it.stockSymbol }
+        val holdings = groupedHoldings.map { createHoldingDto(it.value) }
+        return holdings.filter { it.quantity != 0 }
     }
 }

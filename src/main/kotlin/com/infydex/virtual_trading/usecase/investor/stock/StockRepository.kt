@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface StockRepository : JpaRepository<StockEntity, Any> {
     abstract fun findAllByInvestorIdAndStockSymbol(investorId: Int, stockSymbol: String): List<StockEntity>
+    fun findAllByInvestorId(investorId: Int): List<StockEntity>
 }

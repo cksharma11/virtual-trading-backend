@@ -6,6 +6,7 @@ import com.infydex.virtual_trading.usecase.investor.fund.FundRepository
 import com.infydex.virtual_trading.usecase.investor.fund.FundService
 import com.infydex.virtual_trading.usecase.investor.fund.dto.AddFundDto
 import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
+import com.infydex.virtual_trading.usecase.investor.stock.dto.HoldingResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionType
 import com.infydex.virtual_trading.usecase.investor.stock.entity.StockEntity
@@ -66,5 +67,10 @@ class StockService(
                 status = TransactionStatus.COMPLETED
             )
         )
+    }
+
+    fun holdings(investorId: Int): List<HoldingResponseDto> {
+        val transactions = stockRepository.findAllByInvestorId(investorId)
+        return StockUtil.getHoldings(transactions)
     }
 }

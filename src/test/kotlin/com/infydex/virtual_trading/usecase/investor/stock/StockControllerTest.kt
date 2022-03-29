@@ -5,6 +5,7 @@ import com.infydex.virtual_trading.config.security.JwtIncomingRequestFilter
 import com.infydex.virtual_trading.config.security.TestAuthUtils
 import com.infydex.virtual_trading.exception.InsufficientFundException
 import com.infydex.virtual_trading.exception.InsufficientHoldingException
+import com.infydex.virtual_trading.usecase.investor.stock.dto.HoldingResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.entity.StockEntity
 import org.junit.jupiter.api.Test
@@ -161,5 +162,34 @@ internal class StockControllerTest {
                 MockMvcResultMatchers.content()
                     .json("{\"status\":400,\"message\":\"Insufficient holding\",\"errorType\":\"\"}")
             )
+    }
+
+    @Test
+    fun `should return all holdings of investor`() {
+        val holdings = listOf(
+            HoldingResponseDto(
+                stockSymbol = "WIPRO",
+                cost = 1000.0,
+                averagePrice = 100.0,
+                quantity = 10
+            )
+        )
+
+        BDDMockito.given(stockService.holdings(1))
+            .willReturn(holdings)
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .request(HttpMethod.GET, "/virtual-trading/api/v1/stock/holdings")
+                .contextPath("/virtual-trading")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(
+                    JwtIncomingRequestFilter.X_JWT_PAYLOAD,
+                    TestAuthUtils.createJWTPayload(userId = "1")
+                )
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().json("[{\"stockSymbol\":\"WIPRO\",\"quantity\":10,\"averagePrice\":100.0,\"cost\":1000.0}]"))
     }
 }

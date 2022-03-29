@@ -6,12 +6,14 @@ import com.infydex.virtual_trading.usecase.investor.fund.FundRepository
 import com.infydex.virtual_trading.usecase.investor.fund.FundService
 import com.infydex.virtual_trading.usecase.investor.fund.entity.FundEntity
 import com.infydex.virtual_trading.usecase.investor.fund.entity.TransactionType
+import com.infydex.virtual_trading.usecase.investor.stock.dto.HoldingResponseDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionDto
 import com.infydex.virtual_trading.usecase.investor.stock.dto.StockTransactionType
 import com.infydex.virtual_trading.usecase.investor.stock.entity.StockEntity
 import com.infydex.virtual_trading.usecase.investor.stock.entity.TransactionStatus
 import com.nhaarman.mockito_kotlin.given
 import com.nhaarman.mockito_kotlin.verify
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -155,5 +157,39 @@ internal class StockServiceTest {
         )
 
         assertThrows<InsufficientHoldingException> { stockService.sell(1, stockTransactionDto) }
+    }
+
+    @Test
+    fun `should return holdings of investor`() {
+        val transactions = listOf(
+            StockEntity().copy(
+                stockSymbol = "WIPRO",
+                quantity = 20,
+                price = 100.0,
+                type = StockTransactionType.BUY,
+                status = TransactionStatus.COMPLETED
+            ),
+            StockEntity().copy(
+                stockSymbol = "WIPRO",
+                price = 100.0,
+                quantity = 10,
+                type = StockTransactionType.SELL,
+                status = TransactionStatus.COMPLETED
+            )
+        )
+
+        given(stockRepository.findAllByInvestorId(anyInt()))
+            .willReturn(transactions)
+
+        val expected = listOf(
+            HoldingResponseDto(
+                stockSymbol = "WIPRO",
+                cost = 1000.0,
+                averagePrice = 100.0,
+                quantity = 10
+            )
+        )
+
+        assertEquals(expected, stockService.holdings(1))
     }
 }
